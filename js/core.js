@@ -186,11 +186,12 @@ $.play = function(instrument, key, state) {
   var instrumentName = Object.keys(InstrumentEnum).find(k => InstrumentEnum[k] === instrument).toLowerCase();
   var commonKey = KeyEnum[key];
   var id = "#" + (instrument == InstrumentEnum.MEOW ? "mouth" : "paw-" + ((instrument == InstrumentEnum.BONGO ? commonKey : commonKey <= 5 && commonKey != 0 ? 0 : 1) == 0 ? "left" : "right"));
+  var keyPair = instrument + '-' + commonKey;
   if (state == true) {
-    if (jQuery.inArray(commonKey, pressed) !== -1) {
+    if (jQuery.inArray(keyPair, pressed) !== -1) {
       return;
     }
-    pressed.push(commonKey);
+    pressed.push(keyPair);
     if (instrument != InstrumentEnum.MEOW) {
       $(".instruments>div").each(function(index) {
         $(this).css("visibility", ($(this).attr("id") === instrumentName) ? "visible" : "hidden");
@@ -199,7 +200,7 @@ $.play = function(instrument, key, state) {
     lowLag.play(instrumentName + commonKey);
     $.layers(Object.keys(LayersPerInstrumentEnum).find(k => LayersPerInstrumentEnum[k] == instrument), true);
   } else {
-    pressed.remove(commonKey);
+    pressed.remove(keyPair);
   }
   $(id).css("background-position-x", (state ? "-800px" : "0"));
 }
